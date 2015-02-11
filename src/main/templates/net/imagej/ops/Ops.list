@@ -146,3 +146,20 @@ ops = ```
 	[name: "yen",           iface: "Yen"]
 ]
 ```
+
+
+[BinaryRealOps.java]
+className = "BinaryRealOps"
+namespace = "binaryReal"
+authors = ["Aparna Pal"]
+ops = ```
+[
+	[name: "add",    		iface: "Add",           aliases: ["sum"]],
+	[name: "and",           iface: "And"],
+	[name: "mean",        	iface: "Mean",          aliases: ["avg"]],
+	[name: "copyLeft",      iface: "CopyLeft"],
+	[name: "copyRight",     iface: "CopyRight"],
+	[name: "divide",        iface: "Divide",     	aliases: ["div", "quotient"]],
+	
+]
+```
