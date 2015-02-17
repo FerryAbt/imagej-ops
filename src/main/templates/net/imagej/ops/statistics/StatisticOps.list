@@ -110,6 +110,8 @@ ops = ```
   {name: ifdm, iface: IFDM},
   {name: sumaverage, iface: SumAverage},
   {name: sumentropy, iface: SumEntropy},
+  {name: maxprob, iface: MaxProbability},
+  {name: texturehomogeneity, iface: TextureHomogenity},
   {name: coochxy, iface: CoocHXY},
   {name: coocmeanx, iface: CoocMeanX},
   {name: coocmeany, iface: CoocMeanY},
