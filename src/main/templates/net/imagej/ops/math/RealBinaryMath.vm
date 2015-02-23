@@ -49,24 +49,22 @@ public final class RealBinaryMath {
 
 	private RealBinaryMath() {
 		// NB: Prevent instantiation of utility class.
-	}
-#foreach ($type in $types)
+	}	
 #foreach ($op in $ops)
-#if ($op.codes.contains($type.code))
-#set ($iface = "MathOps.$op.name")
+#set ($iface = "RealBinaryOps.$op.name")
 
-	/** Op that $op.verbs#if ($op.unary) a $type.primitive value#else two $type.primitive values#end. */
-	@Plugin(type = Op.class, name = ${iface}.NAME#if ($type.priority), priority = $type.priority#end#if ($op.aliases), attrs = { @Attr(name = "aliases", value = ${iface}.ALIASES) }#end)
-	public static class $type.name$op.name<T extends NumericType<T>> extends AbstractOutputFunction<T, T> implements $iface {
+	/** Op that $op.verbs#if ($op.unary) a RealType value#else two RealType values#end. */
+	@Plugin(type = Op.class, name = ${iface}.NAME#if ($op.aliases), attrs = { @Attr(name = "aliases", value = ${iface}.ALIASES) }#end)
+	public static class RealType$op.name<T extends RealType<T>> extends AbstractOutputFunction<T, T> implements $iface {
 		@Parameter(type = ItemIO.BOTH)
 		T result;
 
-			 	@Parameter
-               private $type.primitive a;
+		@Parameter
+			private T a;
 #if (!$op.unary)
  
-               @Parameter
-               private $type.primitive b;
+		@Parameter
+			private T b;
 #end
 	
 		@Override
@@ -77,6 +75,7 @@ public final class RealBinaryMath {
 		@Override
 		protected T safeCompute(T input, T output) {
 			output.set(input);
+	
 			return output;
 		}
 	}

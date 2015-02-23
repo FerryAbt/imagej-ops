@@ -19,12 +19,9 @@ types = ```
 ops = ```
 [
 	[name: "Add",                operator: "+",           unary: false, aliases: true,  codes: "ilfd", verbs: "adds (+)"],
-	[name: "Subtract",           operator: "-",           unary: false, aliases: true,  codes: "ilfd", verbs: "subtracts (-)"],
-	[name: "Multiply",           operator: "*",           unary: false, aliases: true,  codes: "ilfd", verbs: "multiplies (*)"],
 	[name: "Divide",             operator: "/",           unary: false, aliases: true,  codes: "ilfd", verbs: "divides (*)"],
 	[name: "And",                operator: "&",           unary: false, aliases: false, codes: "il",   verbs: "computes the bitwise AND (&) of"],
 	[name: "Or",                 operator: "|",           unary: false, aliases: false, codes: "il",   verbs: "computes the bitwise OR (|) of"],
-	[name: "LeftShift",          operator: "<<",          unary: false, aliases: true,  codes: "il",   verbs: "computes the signed left shift (<<) of"],
-	[name: "RightShift",         operator: ">>",          unary: false, aliases: true,  codes: "il",   verbs: "computes the signed right shift (>>) of"],
+
 ]
 ```
