@@ -36,10 +36,11 @@ import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 
 import org.scijava.ItemIO;
+import org.scijava.Priority;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = Ops.CreateImg.NAME)
+@Plugin(type = Op.class, name = Ops.CreateImg.NAME, priority = Priority.HIGH_PRIORITY)
 public class CreateEmptyImgCopy<V extends NativeType<V>> implements
 		Ops.CreateImg {
 
