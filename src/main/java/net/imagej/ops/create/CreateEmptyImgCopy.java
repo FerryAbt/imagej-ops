@@ -30,9 +30,9 @@
 
 package net.imagej.ops.create;
 
-import net.imagej.ImgPlus;
 import net.imagej.ops.Op;
 import net.imagej.ops.Ops;
+import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 
 import org.scijava.ItemIO;
@@ -44,14 +44,14 @@ public class CreateEmptyImgCopy<V extends NativeType<V>> implements
 		Ops.CreateImg {
 
 	@Parameter(type = ItemIO.OUTPUT)
-	private ImgPlus<V> output;
+	private Img<V> output;
 
 	@Parameter
-	private ImgPlus<V> input;
+	private Img<V> input;
 
 	@Override
 	public void run() {
-		output = new ImgPlus<V>(input.factory().create(input,
-				input.firstElement().createVariable()), input);
+		output = input.factory().create(input,
+				input.firstElement().createVariable());
 	}
 }
