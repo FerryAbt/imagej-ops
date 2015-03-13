@@ -10,7 +10,7 @@
 [RealBinaryMath.java]
 types = ```
 [
-	[name: "Integer", primitive: "int",    code: "i", priority: 0.4],
+	[name: "UnsignedIntegerType", priority: 0.4],
 	[name: "Long",    primitive: "long",   code: "l", priority: 0.3],
 	[name: "Float",   primitive: "float",  code: "f", priority: 0.2],
 	[name: "Double",  primitive: "double", code: "d", priority: 0.1]
@@ -18,10 +18,9 @@ types = ```
 ```
 ops = ```
 [
-	[name: "Add",                operator: "+",           unary: false, aliases: true,  codes: "ilfd", verbs: "adds (+)"],
-	[name: "Divide",             operator: "/",           unary: false, aliases: true,  codes: "ilfd", verbs: "divides (*)"],
-	[name: "And",                operator: "&",           unary: false, aliases: false, codes: "il",   verbs: "computes the bitwise AND (&) of"],
-	[name: "Or",                 operator: "|",           unary: false, aliases: false, codes: "il",   verbs: "computes the bitwise OR (|) of"],
-
+	[name: "Add",                function: "add",           unary: false, aliases: true,  codes: "ilfd", verbs: "adds (+)"],
+	[name: "Divide",             function: "div",           unary: false, aliases: true,  codes: "ilfd", verbs: "divides (*)"],
+	[name: "Subtract",           function: "sub",           unary: false, aliases: true,  codes: "ilfd", verbs: "subtracts (-)"],
+	[name: "Multiply",           function: "mul",           unary: false, aliases: true,  codes: "ilfd", verbs: "multiplies (*)"],
 ]
 ```
