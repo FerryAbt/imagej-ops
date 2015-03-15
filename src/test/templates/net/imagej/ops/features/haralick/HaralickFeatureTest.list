@@ -1,22 +1,23 @@
 [HaralickFeatureTest.java]
 ops = ```
 [
-  {iface: ASM,                 empty2d: 1.0,         random2d: 0.020143803845281433,	constant2d: 1.0, 	empty3d: 1.0, 	random3d: 0.02009633514707941, 	constant3d: 1.0},
-  {iface: ClusterPromenence,   empty2d: 0.0,         random2d: 157.04881194925156, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 156.95121734095767, 		constant3d: 0.0},
-  {iface: ClusterShade,        empty2d: 0.0,         random2d: 0.4812211030779577, 		constant2d: 0.0, 	empty3d: 0.0,	random3d: 0.16537648349282966, 	constant3d: 0.0},
-  {iface: Contrast,            empty2d: 0.0,         random2d: 8.212764003673094, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 8.108489281530035, 		constant3d: 0.0},
-  {iface: Correlation,         empty2d: 0.0,         random2d: -0.0020793387433069685, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 6.562047300570562E-6, 		constant3d: 0.0},
-  {iface: DifferenceEntropy,   empty2d: 0.0,		 random2d: 1.845961267002512, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 1.8449346463705167, 		constant3d: 0.0},
+  {iface: ASM,                 empty2d: 1.0,         random2d: 0.020156637077849197,	constant2d: 1.0, 	empty3d: 1.0, 	random3d: 0.02009638381678881, 	constant3d: 1.0},
+  {iface: ClusterPromenence,   empty2d: 0.0,         random2d: 156.43714126689318, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 156.05081146855233, 		constant3d: 0.0},
+  {iface: ClusterShade,        empty2d: 0.0,         random2d: 0.3306676545456644, 		constant2d: 0.0, 	empty3d: 0.0,	random3d: 0.048357707174167326, 	constant3d: 0.0},
+  {iface: Contrast,            empty2d: 0.0,         random2d: 8.272626262626263, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 8.132981539533265, 		constant3d: 0.0},
+  {iface: Correlation,         empty2d: 0.0,         random2d: -0.0030307841707376422, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d:- 7.670780437882068E-4, 		constant3d: 0.0},
+  {iface: DifferenceEntropy,   empty2d: 0.0,		 random2d: 1.8476756084894421, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 1.8458725093917443, 		constant3d: 0.0},
   {iface: DifferenceVariance,  empty2d: 0.0,         random2d: 0.0, 					constant2d: 0.0, 	empty3d: 0.0, 	random3d: 0.0, 					constant3d: 0.0},
-  {iface: Entropy,             empty2d: 0.0,         random2d: 1.706155100574945, 			constant2d: 0.0, 	empty3d: 0.0,	random3d: 1.7059475284295762, 		constant3d: 0.0},
-  {iface: ICM1,                empty2d: -0.5657055180967482,         random2d: -1.1317107495774972, 			constant2d: -0.5657055180967482, 	empty3d: -0.5657054958922876, 	random3d: -1.1314236691015518, 		constant3d: -0.5657054958922876},
-  {iface: ICM2,                empty2d: 0.0,         random2d: 0.9941377124266562, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 0.9941109716954898, 		constant3d: 0.0},
-  {iface: IFDM,                empty2d: 0.0,         random2d: 0.4591188945734399, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 0.4539228227942962, 		constant3d: 0.0},
-  {iface: SumAverage,          empty2d: 2.0,         random2d: 8.023048668503213, 		constant2d: 2.0, 	empty3d: 2.0, 	random3d: 8.014046420316012, 	constant3d: 2.0},
-  {iface: SumEntropy,          empty2d: -0.0,		 random2d: 1.057840396439348, 		constant2d: 0, 		empty3d: 0.0, 	random3d: 1.0589939190052107, 	constant3d: 0.0},
-  {iface: SumVariance,         empty2d: 0.0,         random2d: 8.074859025179586,			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 8.10892527177568, 		constant3d: 0.0},
-  {iface: Variance,            empty2d: 0.0,         random2d: 4.071905814130958, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 4.054354770395587, 		constant3d: 0.0},
+  {iface: Entropy,             empty2d: 0.0,         random2d: 1.7061673583045558, 			constant2d: 0.0, 	empty3d: 0.0,	random3d: 1.7059752468491929, 		constant3d: 0.0},
+  {iface: ICM1,                empty2d: -0.5657055180967482,         random2d: -1.13190278555301, 			constant2d: -0.5657055180967482, 	empty3d: -0.5657054958922876, 	random3d: -1.1314266456516264, 		constant3d: -0.5657054958922876},
+  {iface: ICM2,                empty2d: 0.0,         random2d: 0.994143823300342, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 0.9941113078948867, 		constant3d: 0.0},
+  {iface: IFDM,                empty2d: 0.0,         random2d: 0.4596948051948054, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 0.4542897115655735, 		constant3d: 0.0},
+  {iface: SumAverage,          empty2d: 2.0,         random2d: 8.044343434343435, 		constant2d: 2.0, 	empty3d: 2.0, 	random3d: 8.009804946011842, 	constant3d: 2.0},
+  {iface: SumEntropy,          empty2d: -0.0,		 random2d: 1.0574462007349505, 		constant2d: 0, 		empty3d: 0.0, 	random3d: 1.058331669907167, 	constant3d: 0.0},
+  {iface: SumVariance,         empty2d: 0.0,         random2d: 8.07025588205285,			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 8.082561473622349, 		constant3d: 0.0},
+  {iface: Variance,            empty2d: 0.0,         random2d: 4.085721156004489, 			constant2d: 0.0, 	empty3d: 0.0, 	random3d: 4.053886887109363, 		constant3d: 0.0},
   {iface: MaxProbability,      empty2d: 0.0,         random2d: 0.0, 						constant2d: 0.0, 	empty3d: 0.0, 	random3d: 0.0, 		constant3d: 0.0},
-  {iface: TextureHomogenity,   empty2d: 1.0,         random2d: 0.4141351829988194, 			constant2d: 1.0, 	empty3d: 1.0, 	random3d: 0.4174644564769958, 		constant3d: 1.0}
+  {iface: TextureHomogenity,   empty2d: 1.0,         random2d: 0.41295262145262135, 			constant2d: 1.0, 	empty3d: 1.0, 	random3d: 0.4164961105305933, 		constant3d: 1.0}
 ]
 ```
+
