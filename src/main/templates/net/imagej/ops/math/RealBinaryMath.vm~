@@ -60,6 +60,8 @@ public final class RealBinaryMath {
 		@Parameter(type = ItemIO.BOTH)
 		T result;
 
+		@Parameter
+			private T a;
 #if (!$op.unary)
  
 		@Parameter
