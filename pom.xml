@@ -5,16 +5,20 @@
 	<parent>
 		<groupId>net.imagej</groupId>
 		<artifactId>pom-imagej</artifactId>
-		<version>5.5.0</version>
+		<version>5.13.0</version>
 		<relativePath />
 	</parent>
 
 	<artifactId>imagej-ops</artifactId>
-	<version>0.8.1-SNAPSHOT</version>
+	<version>0.10.1-SNAPSHOT</version>
 
 	<name>ImageJ Operations</name>
 	<description>ImageJ OPS: a framework for reusable algorithms.</description>
 	<inceptionYear>2014</inceptionYear>
+
+	<properties>
+		<scijava-expression-parser.version>2.0.0</scijava-expression-parser.version>
+	</properties>
 
 	<developers>
 		<developer>
@@ -167,6 +171,10 @@
 			<groupId>org.scijava</groupId>
 			<artifactId>scijava-common</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.scijava</groupId>
+			<artifactId>scijava-expression-parser</artifactId>
+		</dependency>
 
 		<!-- Third-party dependencies -->
 		<dependency>
@@ -202,8 +210,10 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<!-- NB: Make Eclipse generate code in a full build; see:
-					     http://wiki.eclipse.org/M2E_plugin_execution_not_covered -->
+					<!--
+					NB: Make Eclipse generate code in a full build; see:
+					http://wiki.eclipse.org/M2E_plugin_execution_not_covered
+					-->
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
 					<version>1.0.0</version>
@@ -221,6 +231,7 @@
 									</pluginExecutionFilter>
 									<action>
 										<execute>
+											<runOnConfiguration>true</runOnConfiguration>
 											<runOnIncremental>false</runOnIncremental>
 										</execute>
 									</action>

@@ -1,19 +1,10 @@
-#**
 
-	Template for generation RealType implementations of arithmetic ops interfaces
-
-	@author Jonathan Hale
-
-*#
-#** set default values *#
-#foreach ($member in $members)#if (!$member.type)$!member.put("type","double")#end#end
-#if (!$authors)#set($authors = ["Barry DeZonia", "Jonathan Hale"])#end
 /*
  * #%L
- * ImageJ OPS: a framework for reusable algorithms.
+ * ImageJ software for multidimensional image processing and analysis.
  * %%
  * Copyright (C) 2014 - 2015 Board of Regents of the University of
- * Wisconsin-Madison and University of Konstanz.
+ * Wisconsin-Madison, University of Konstanz and Brian Northan.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,52 +28,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
+
 package net.imagej.ops.arithmetic.real;
 
 import net.imagej.ops.AbstractStrictFunction;
 import net.imagej.ops.MathOps;
 import net.imagej.ops.Op;
-
 import net.imglib2.type.numeric.RealType;
-#foreach ($imp in $imports)
-import $imp;
-#end
 
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-
 /**
-#foreach ($line in $javadoc.split('\n'))
- * $line
-#end
-#foreach ($author in $authors)
- * @author $author
-#end
+ * Sets an output real number to 0 if the input real number is less than 0.
+ * Otherwise sets the output real number to 1. This implements a step function
+ * similar to Mathematica's unitstep function. It is a Heaviside step function
+ * with h(0) = 1 rather than 0.5.
+ * 
+ * @author Barry DeZonia
+ * @author Jonathan Hale
  */
-@Plugin(type = Op.class, name = MathOps.${interface}.NAME)
-public class Real$interface<I extends RealType<I>, O extends RealType<O>>
-	extends AbstractStrictFunction<I, O> implements MathOps.$interface
+@Plugin(type = Op.class, name = MathOps.Step.NAME)
+public class RealStep<I extends RealType<I>, O extends RealType<O>> extends
+	AbstractStrictFunction<I, O> implements MathOps.Step
 {
-#foreach ($member in $members)
-#if (!$member.isEmpty())
-#if (!$member.modifiers.equals("final static"))
-	@Parameter
-#end
-	private #if ($member.modifiers)${member.modifiers} #end${member.type} ${member.name}#if ($member.init)= ${member.init}#end;
-#end
-#end
 
 	@Override
-	public O compute(final I input, O output){
-		#if ($compute_body)
-		$compute_body
-		#end
-		#if ($compute_expr)
-		output.setReal(${compute_expr});
-		#end
-		#if (!$omit_return)
+	public O compute(final I input, final O output) {
+		if (input.getRealDouble() < 0) output.setZero();
+		else output.setOne();
 		return output;
-		#end
 	}
 }

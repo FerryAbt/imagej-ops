@@ -1,9 +1,10 @@
+
 /*
  * #%L
- * ImageJ OPS: a framework for reusable algorithms.
+ * ImageJ software for multidimensional image processing and analysis.
  * %%
  * Copyright (C) 2014 - 2015 Board of Regents of the University of
- * Wisconsin-Madison and University of Konstanz.
+ * Wisconsin-Madison, University of Konstanz and Brian Northan.
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,27 +29,36 @@
  * #L%
  */
 
-package net.imagej.ops.math.add;
+package net.imagej.ops.arithmetic.real;
 
-import net.imagej.ops.Op;
+import net.imagej.ops.AbstractStrictFunction;
 import net.imagej.ops.MathOps;
+import net.imagej.ops.Op;
+import net.imglib2.type.numeric.RealType;
 
-import org.scijava.ItemIO;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = MathOps.Add.NAME, priority = $priority)
-public class AddConstantTo$name implements MathOps.Add {
-
-	@Parameter(type = ItemIO.BOTH)
-	private $primitive a;
+/**
+ * Sets the real component of an output real number to the reciprocal of the
+ * real component of an input real number.
+ * 
+ * @author Barry DeZonia
+ * @author Jonathan Hale
+ */
+@Plugin(type = Op.class, name = MathOps.Reciprocal.NAME)
+public class RealReciprocal<I extends RealType<I>, O extends RealType<O>>
+	extends AbstractStrictFunction<I, O> implements MathOps.Reciprocal
+{
 
 	@Parameter
-	private $primitive b;
+	private double dbzVal;
 
 	@Override
-	public void run() {
-		a += b;
+	public O compute(final I input, final O output) {
+		final double inputVal = input.getRealDouble();
+		if (inputVal == 0) output.setReal(dbzVal);
+		else output.setReal(1.0 / inputVal);
+		return output;
 	}
-
 }
