@@ -57,14 +57,11 @@ public final class RealBinaryMath {
 	/** Op that $op.verbs#if ($op.unary) a RealType value#else two RealType values#end. */
 	@Plugin(type = Op.class, name = ${iface}.NAME#if ($op.aliases), attrs = { @Attr(name = "aliases", value = ${iface}.ALIASES) }#end)
 	public static class RealType$op.name<T extends RealType<T>> extends AbstractOutputFunction<T, T> implements $iface {
-		@Parameter(type = ItemIO.BOTH)
-		T result;
 
-#if (!$op.unary)
  
 		@Parameter
 			private T b;
-#end
+
 	
 		@Override
 		public T createOutput(T input) {
@@ -73,8 +70,14 @@ public final class RealBinaryMath {
 
 		@Override
 		protected T safeCompute(T input, T output) {
-		output.set(input);
-		output.$!{op.function}(b);
+			if(output== b)
+			{
+				output.$!{op.function}(input);
+			}
+			else{
+				output.set(input);
+				output.$!{op.function}(b);
+			}
 			return output;
 		}
 	}
