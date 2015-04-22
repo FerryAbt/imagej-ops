@@ -64,10 +64,9 @@ public class TestRealBinaryMath extends AbstractOpTest {
 		two = new ${arg}();
 		two.setOne();
 		result = ops.run(RealBinaryMath.RealType${className}.class, two, two, two);
-		list = (ArrayList) result;
-		mid = ($arg)list.get(0);
+		mid = ($arg) result;
 		test = mid.getRealDouble();
-		assertEquals(test,2.0, 0.0);
+		assertEquals(test,$test.result, 0.0);
 
 	#end
 
