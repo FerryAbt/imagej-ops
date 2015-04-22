@@ -30,7 +30,7 @@
 
 package net.imagej.operator;
 
-import net.imglib2.ops.operation.real.binary.RealMin;
+import net.imglib2.ops.operation.real.binary.RealMin; 
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 

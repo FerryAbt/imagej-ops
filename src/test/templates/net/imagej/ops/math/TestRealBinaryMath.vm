@@ -32,10 +32,13 @@ package net.imagej.ops.math;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import java.util.ArrayList;
 import net.imagej.ops.AbstractOpTest;
 import net.imagej.ops.math.RealBinaryMath;
-
+import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.integer.*;
 import org.junit.Test;
+import net.imglib2.type.numeric.real.*;
 
 /**
  * Tests the {@link RealBinaryMath} ops.
@@ -44,20 +47,33 @@ import org.junit.Test;
  */
 public class TestRealBinaryMath extends AbstractOpTest {
 #foreach ($test in $tests)
-#if ($types.containsKey($test.code))
-#set ($type = $types.get($test.code))
 #set ($className = "$test.op")
 
 	/** Tests {@link RealBinaryMath.$className}. */
 	@Test
 	public void test$className() {
-		final Object result = ops.run(RealBinaryMath.${className}.class, $test.args);
-		final $type. value = ($type.name) result;
+	
+	RealType two;
+	RealType mid;
+	Object result;
+	ArrayList list;
+	double test;
+	
 
-		assertEquals($test.result, value);
+	#foreach($arg in $args)
+		two = new ${arg}();
+		two.setOne();
+		result = ops.run(RealBinaryMath.RealType${className}.class, two, two, two);
+		list = (ArrayList) result;
+		mid = ($arg)list.get(0);
+		test = mid.getRealDouble();
+		assertEquals(test,2.0, 0.0);
+
+	#end
+
+
 
 	}
-#end
 #end
 
 }
