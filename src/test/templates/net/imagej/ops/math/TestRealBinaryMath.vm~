@@ -40,7 +40,6 @@ import net.imglib2.type.numeric.integer.*;
 import org.junit.Test;
 import net.imglib2.type.numeric.real.*;
 import net.imglib2.type.volatiles.VolatileRealType;
-import net.imagej.types.UnboundedIntegerType;
 
 /**
  * Tests the {@link RealBinaryMath} ops.
