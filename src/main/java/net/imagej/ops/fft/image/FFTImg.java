@@ -30,17 +30,17 @@
 
 package net.imagej.ops.fft.image;
 
-import org.scijava.Priority;
-import org.scijava.plugin.Plugin;
-
 import net.imagej.ops.Ops.FFT;
+import net.imagej.ops.fft.methods.FFTRAI;
+import net.imagej.ops.fft.size.ComputeFFTSize;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
-import net.imagej.ops.fft.methods.FFTRAI;
-import net.imagej.ops.fft.size.ComputeFFTSize;
+
+import org.scijava.Priority;
+import org.scijava.plugin.Plugin;
 
 /**
  * Forward FFT that operates on Img
@@ -51,7 +51,8 @@ import net.imagej.ops.fft.size.ComputeFFTSize;
  */
 @Plugin(type = FFT.class, name = FFT.NAME, priority = Priority.HIGH_PRIORITY)
 public class FFTImg<T extends RealType<T>, I extends Img<T>> extends
-		AbstractFFTImg<T, I, ComplexFloatType, Img<ComplexFloatType>> {
+	AbstractFFTImg<T, I, ComplexFloatType, Img<ComplexFloatType>>
+{
 
 	@Override
 	protected void computeFFTFastSize(long[] inputSize) {
@@ -59,8 +60,7 @@ public class FFTImg<T extends RealType<T>, I extends Img<T>> extends
 		paddedSize = new long[inputSize.length];
 		fftSize = new long[inputSize.length];
 
-		ops.run(ComputeFFTSize.class, inputSize, paddedSize, fftSize, true,
-				true);
+		ops.run(ComputeFFTSize.class, inputSize, paddedSize, fftSize, true, true);
 
 	}
 
@@ -70,18 +70,18 @@ public class FFTImg<T extends RealType<T>, I extends Img<T>> extends
 		paddedSize = new long[inputSize.length];
 		fftSize = new long[inputSize.length];
 
-		ops.run(ComputeFFTSize.class, inputSize, paddedSize, fftSize, true,
-				false);
+		ops.run(ComputeFFTSize.class, inputSize, paddedSize, fftSize, true, false);
 
 	}
 
 	@Override
 	protected Img<ComplexFloatType> createFFTImg(ImgFactory<T> factory,
-			long[] size) {
+		long[] size)
+	{
 
 		try {
 			return factory.imgFactory(new ComplexFloatType()).create(size,
-					new ComplexFloatType());
+				new ComplexFloatType());
 		}
 		// TODO: error handling?
 		catch (IncompatibleTypeException e) {
@@ -90,8 +90,9 @@ public class FFTImg<T extends RealType<T>, I extends Img<T>> extends
 	}
 
 	@Override
-	public Img<ComplexFloatType> safeCompute(I input,
-			Img<ComplexFloatType> output) {
+	public Img<ComplexFloatType>
+		safeCompute(I input, Img<ComplexFloatType> output)
+	{
 
 		ops.run(FFTRAI.class, output, input, obf, paddedSize);
 

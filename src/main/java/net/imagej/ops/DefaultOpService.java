@@ -7,13 +7,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -36,6 +36,21 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import net.imagej.ImgPlus;
+import net.imagej.ops.create.CreateEmptyImgCopy;
+import net.imagej.ops.create.CreateEmptyImgPlusCopy;
+import net.imagej.ops.create.CreateImgDifferentNativeType;
+import net.imagej.ops.create.CreateImgNativeType;
+import net.imagej.ops.create.DefaultCreateImg;
+import net.imagej.ops.logic.LogicNamespace;
+import net.imagej.ops.math.MathNamespace;
+import net.imagej.ops.threshold.ThresholdNamespace;
+import net.imglib2.Dimensions;
+import net.imglib2.img.Img;
+import net.imglib2.img.ImgFactory;
+import net.imglib2.type.NativeType;
+import net.imglib2.type.Type;
+
 import org.scijava.command.CommandInfo;
 import org.scijava.command.CommandService;
 import org.scijava.log.LogService;
@@ -49,7 +64,7 @@ import org.scijava.service.Service;
 
 /**
  * Default service for managing and executing {@link Op}s.
- * 
+ *
  * @author Curtis Rueden
  */
 @Plugin(type = Service.class)
@@ -69,6 +84,11 @@ public class DefaultOpService extends AbstractPTService<Op> implements
 	@Parameter
 	private LogService log;
 
+	private LogicNamespace logic;
+	private MathNamespace math;
+	private ThresholdNamespace threshold;
+	private boolean namespacesReady;
+
 	// -- OpService methods --
 
 	@Override
@@ -78,7 +98,8 @@ public class DefaultOpService extends AbstractPTService<Op> implements
 	}
 
 	@Override
-	public <OP extends Op> Object run(final Class<OP> type, final Object... args) {
+	public <OP extends Op> Object run(final Class<OP> type, final Object... args)
+	{
 		final Module module = module(type, args);
 		return run(module);
 	}
@@ -143,211 +164,288 @@ public class DefaultOpService extends AbstractPTService<Op> implements
 		return sorted;
 	}
 
-	// -- Operation shortcuts --
+	// -- Operation shortcuts - global namespace --
 
 	@Override
-	public Object add(final Object... args) {
-		return run(MathOps.Add.NAME, args);
-	}
-
-	@Override
-	public Object ascii(Object... args) {
+	public Object ascii(final Object... args) {
 		return run(Ops.ASCII.NAME, args);
 	}
 
 	@Override
-	public Object chunker(Object... args) {
+	public Object chunker(final Object... args) {
 		return run(Ops.Chunker.NAME, args);
 	}
 
 	@Override
-	public Object convert(Object... args) {
+	public Object convert(final Object... args) {
 		return run(Ops.Convert.NAME, args);
 	}
 
 	@Override
-	public Object convolve(Object... args) {
+	public Object convolve(final Object... args) {
 		return run(Ops.Convolve.NAME, args);
 	}
 
 	@Override
-	public Object createimg(Object... args) {
+	public Object correlate(Object... args) {
+		return run(Ops.Correlate.NAME, args);
+	}
+
+	@Override
+	public Object createimg(final Object... args) {
 		return run(Ops.CreateImg.NAME, args);
 	}
 
 	@Override
-	public Object crop(Object... args) {
+	public <V extends NativeType<V>> ImgPlus<V> createimg(final ImgPlus<V> input)
+	{
+		@SuppressWarnings("unchecked")
+		final ImgPlus<V> result =
+			(ImgPlus<V>) run(CreateEmptyImgPlusCopy.class, input);
+		return result;
+	}
+
+	@Override
+	public <V extends NativeType<V>> Img<V> createimg(final Img<V> input,
+		final V type)
+	{
+		@SuppressWarnings("unchecked")
+		final Img<V> result =
+			(Img<V>) run(CreateImgDifferentNativeType.class, input, type);
+		return result;
+	}
+
+	@Override
+	public <V extends NativeType<V>> Img<V> createimg(final ImgFactory<V> fac,
+		final V outType, final Dimensions dims)
+	{
+		@SuppressWarnings("unchecked")
+		final Img<V> result =
+			(Img<V>) run(CreateImgNativeType.class, fac, outType, dims);
+		return result;
+	}
+
+	@Override
+	public <V extends Type<V>> Img<V> createimg(final long... dims) {
+		@SuppressWarnings("unchecked")
+		final Img<V> result = (Img<V>) run(DefaultCreateImg.class, dims);
+		return result;
+	}
+
+	@Override
+	public <V extends Type<V>> Img<V> createimg(final V outType,
+		final long... dims)
+	{
+		@SuppressWarnings("unchecked")
+		final Img<V> result = (Img<V>) run(DefaultCreateImg.class, outType, dims);
+		return result;
+	}
+
+	@Override
+	public <V extends Type<V>> Img<V> createimg(final V outType,
+		final ImgFactory<V> fac, final long... dims)
+	{
+		@SuppressWarnings("unchecked")
+		final Img<V> result =
+			(Img<V>) run(DefaultCreateImg.class, outType, fac, dims);
+		return result;
+	}
+
+	@Override
+	public <V extends NativeType<V>> Img<V> createimg(final Img<V> input) {
+		@SuppressWarnings("unchecked")
+		final Img<V> result = (Img<V>) run(CreateEmptyImgCopy.class, input);
+		return result;
+	}
+
+	@Override
+	public Object crop(final Object... args) {
 		return run(Ops.Crop.NAME, args);
 	}
 
 	@Override
-	public Object deconvolve(Object... args) {
+	public Object deconvolve(final Object... args) {
 		return run(Ops.Deconvolve.NAME, args);
 	}
 
 	@Override
-	public Object divide(Object... args) {
-		return run(MathOps.Divide.NAME, args);
-	}
-
-	@Override
-	public Object equation(Object... args) {
+	public Object equation(final Object... args) {
 		return run(Ops.Equation.NAME, args);
 	}
 
 	@Override
-	public Object eval(Object... args) {
+	public Object eval(final Object... args) {
 		return run(Ops.Eval.NAME, args);
 	}
 
 	@Override
-	public Object fft(Object... args) {
+	public Object fft(final Object... args) {
 		return run("fft", args);
 	}
 
 	@Override
-	public Object gauss(Object... args) {
+	public Object fftsize(Object... args) {
+		return run(Ops.FFTSize.NAME, args);
+	}
+
+	@Override
+	public Object gauss(final Object... args) {
 		return run(Ops.Gauss.NAME, args);
 	}
 
 	@Override
-	public Object gaussKernel(Object... args) {
+	public Object gaussKernel(final Object... args) {
 		return run("gausskernel", args);
 	}
 
 	@Override
-	public Object help(Object... args) {
+	public Object help(final Object... args) {
 		return run(Ops.Help.NAME, args);
 	}
 
 	@Override
-	public Object histogram(Object... args) {
+	public Object histogram(final Object... args) {
 		return run(Ops.Histogram.NAME, args);
 	}
 
 	@Override
-	public Object identity(Object... args) {
+	public Object identity(final Object... args) {
 		return run(Ops.Identity.NAME, args);
 	}
 
 	@Override
-	public Object ifft(Object... args) {
+	public Object ifft(final Object... args) {
 		return run("ifft", args);
 	}
 
 	@Override
-	public Object invert(Object... args) {
+	public Object invert(final Object... args) {
 		return run(Ops.Invert.NAME, args);
 	}
 
 	@Override
-	public Object join(Object... args) {
+	public Object join(final Object... args) {
 		return run(Ops.Join.NAME, args);
 	}
 
 	@Override
-	public Object logKernel(Object... args) {
+	public Object log(Object... args) {
+		return run(Ops.Log.NAME, args);
+	}
+
+	@Override
+	public Object logKernel(final Object... args) {
 		return run("logkernel", args);
 	}
 
 	@Override
-	public Object lookup(Object... args) {
+	public Object lookup(final Object... args) {
 		return run(Ops.Lookup.NAME, args);
 	}
 
 	@Override
-	public Object loop(Object... args) {
+	public Object loop(final Object... args) {
 		return run(Ops.Loop.NAME, args);
 	}
 
 	@Override
-	public Object map(Object... args) {
+	public Object map(final Object... args) {
 		return run(Ops.Map.NAME, args);
 	}
 
 	@Override
-	public Object max(Object... args) {
+	public Object max(final Object... args) {
 		return run(Ops.Max.NAME, args);
 	}
 
 	@Override
-	public Object mean(Object... args) {
+	public Object mean(final Object... args) {
 		return run(Ops.Mean.NAME, args);
 	}
 
 	@Override
-	public Object median(Object... args) {
+	public Object median(final Object... args) {
 		return run(Ops.Median.NAME, args);
 	}
 
 	@Override
-	public Object min(Object... args) {
+	public Object min(final Object... args) {
 		return run(Ops.Min.NAME, args);
 	}
 
 	@Override
-	public Object minmax(Object... args) {
+	public Object minmax(final Object... args) {
 		return run(Ops.MinMax.NAME, args);
 	}
 
 	@Override
-	public Object multiply(Object... args) {
-		return run(MathOps.Multiply.NAME, args);
-	}
-
-	@Override
-	public Object normalize(Object... args) {
+	public Object normalize(final Object... args) {
 		return run(Ops.Normalize.NAME, args);
 	}
 
 	@Override
-	public Object project(Object... args) {
+	public Object project(final Object... args) {
 		return run(Ops.Project.NAME, args);
 	}
 
 	@Override
-	public Object quantile(Object... args) {
+	public Object quantile(final Object... args) {
 		return run(Ops.Quantile.NAME, args);
 	}
 
 	@Override
-	public Object scale(Object... args) {
+	public Object scale(final Object... args) {
 		return run(Ops.Scale.NAME, args);
 	}
 
 	@Override
-	public Object size(Object... args) {
+	public Object size(final Object... args) {
 		return run(Ops.Size.NAME, args);
 	}
 
 	@Override
-	public Object slicewise(Object... args) {
+	public Object slicewise(final Object... args) {
 		return run(Ops.Slicewise.NAME, args);
 	}
 
 	@Override
-	public Object stddev(Object... args) {
+	public Object stddev(final Object... args) {
 		return run(Ops.StdDeviation.NAME, args);
 	}
 
 	@Override
-	public Object subtract(Object... args) {
-		return run(MathOps.Subtract.NAME, args);
-	}
-
-	@Override
-	public Object sum(Object... args) {
+	public Object sum(final Object... args) {
 		return run(Ops.Sum.NAME, args);
 	}
 
 	@Override
-	public Object threshold(Object... args) {
+	public Object threshold(final Object... args) {
 		return run(Ops.Threshold.NAME, args);
 	}
 
 	@Override
-	public Object variance(Object... args) {
+	public Object variance(final Object... args) {
 		return run(Ops.Variance.NAME, args);
+	}
+
+	// -- Operation shortcuts - other namespaces --
+
+	@Override
+	public LogicNamespace logic() {
+		if (!namespacesReady) initNamespaces();
+		return logic;
+	}
+
+	@Override
+	public MathNamespace math() {
+		if (!namespacesReady) initNamespaces();
+		return math;
+	}
+
+	@Override
+	public ThresholdNamespace threshold() {
+		if (!namespacesReady) initNamespaces();
+		return threshold;
 	}
 
 	// -- SingletonService methods --
@@ -373,11 +471,24 @@ public class DefaultOpService extends AbstractPTService<Op> implements
 		return outputs.size() == 1 ? outputs.get(0) : outputs;
 	}
 
+	// -- Helper methods - lazy initialization --
+
+	private synchronized void initNamespaces() {
+		if (namespacesReady) return;
+		logic = new LogicNamespace();
+		getContext().inject(logic);
+		math = new MathNamespace();
+		getContext().inject(math);
+		threshold = new ThresholdNamespace();
+		getContext().inject(threshold);
+		namespacesReady = true;
+	}
+
 	// -- Deprecated methods --
 
 	@Deprecated
 	@Override
-	public Object create(Object... args) {
+	public Object create(final Object... args) {
 		return createimg(args);
 	}
 

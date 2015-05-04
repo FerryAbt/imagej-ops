@@ -7,13 +7,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,34 +28,24 @@
  * #L%
  */
 
-package net.imagej.ops.create;
+package net.imagej.ops;
 
-import net.imagej.ops.Op;
-import net.imagej.ops.Ops;
-import net.imglib2.img.Img;
-import net.imglib2.type.NativeType;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.scijava.ItemIO;
-import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
+/**
+ * Annotation for methods that delegate to a specific {@link Op} implementation.
+ *
+ * @author Curtis Rueden
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface OpMethod {
 
-@Plugin(type = Op.class, name = Ops.CreateImg.NAME,
-	priority = Priority.LOW_PRIORITY)
+	Class<? extends Op> op() default Op.class;
 
-public class CreateEmptyImgCopy<V extends NativeType<V>> implements
-	Ops.CreateImg
-{
+	Class<? extends Op>[] ops() default {};
 
-	@Parameter(type = ItemIO.OUTPUT)
-	private Img<V> output;
-
-	@Parameter
-	private Img<V> input;
-
-	@Override
-	public void run() {
-		output =
-			input.factory().create(input, input.firstElement().createVariable());
-	}
 }

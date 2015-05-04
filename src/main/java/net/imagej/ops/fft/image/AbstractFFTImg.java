@@ -30,8 +30,6 @@
 
 package net.imagej.ops.fft.image;
 
-import org.scijava.plugin.Parameter;
-
 import net.imagej.ops.Ops.FFT;
 import net.imagej.ops.fft.AbstractFFTIterable;
 import net.imglib2.RandomAccessibleInterval;
@@ -39,13 +37,16 @@ import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 
+import org.scijava.plugin.Parameter;
+
 /**
  * Abstract superclass for forward FFT implementations that operate on Img<T>.
  * 
  * @author Brian Northan
  */
 public abstract class AbstractFFTImg<T, I extends Img<T>, C, O extends Img<C>>
-		extends AbstractFFTIterable<T, C, I, O> implements FFT {
+	extends AbstractFFTIterable<T, C, I, O> implements FFT
+{
 
 	/**
 	 * size of border to apply in each dimension
@@ -93,7 +94,8 @@ public abstract class AbstractFFTImg<T, I extends Img<T>, C, O extends Img<C>>
 
 		if (fast) {
 			computeFFTFastSize(inputSize);
-		} else {
+		}
+		else {
 			computeFFTSmallSize(inputSize);
 		}
 

@@ -30,17 +30,22 @@
 
 package net.imagej.ops.fft.filter;
 
-import net.imagej.ops.Op;
+import org.scijava.plugin.Parameter;
+
+import net.imagej.ops.AbstractOutputFunction;
 import net.imagej.ops.OpService;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
-import net.imglib2.type.numeric.ComplexType;
+import net.imglib2.img.ImgFactory;
+import net.imglib2.img.planar.PlanarImgFactory;
+import net.imglib2.outofbounds.OutOfBoundsFactory;
+import net.imglib2.type.Type;
 import net.imglib2.type.numeric.RealType;
-
-import org.scijava.plugin.Parameter;
+import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.util.Util;
 
 /**
- * Abstract class for FFT based filters that operate on RAI
+ * Abstract class for filters that operate on Img.
  * 
  * @author bnorthan
  * @param <I>
@@ -48,58 +53,81 @@ import org.scijava.plugin.Parameter;
  * @param <K>
  * @param <C>
  */
-public abstract class AbstractFFTFilterRAI<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-	implements Op
+public abstract class AbstractFilterImg<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>>
+	extends AbstractOutputFunction<Img<I>, Img<O>>
 {
 
 	@Parameter
 	protected OpService ops;
 
 	/**
-	 * input rai. If extension is desired it needs to be done before passing the
-	 * rai to the op
+	 * the kernel (psf)
 	 */
 	@Parameter
-	protected RandomAccessibleInterval<I> raiExtendedInput;
+	protected RandomAccessibleInterval<K> kernel;
 
 	/**
-	 * kernel rai. Needs to be the same size as the input rai
+	 * Border size in each dimensions. If null default border size will be added.
 	 */
 	@Parameter(required = false)
-	protected RandomAccessibleInterval<K> raiExtendedKernel;
+	protected long[] borderSize = null;
 
 	/**
-	 * Img to be used to store FFTs for input. Size of fftInput must correspond to
-	 * the fft size of raiExtendedInput
+	 * generates the out of bounds strategy for the extended area of the input
 	 */
 	@Parameter(required = false)
-	protected Img<C> fftInput;
+	protected OutOfBoundsFactory<I, RandomAccessibleInterval<I>> obfInput;
 
 	/**
-	 * Img to be used to store FFTs for kernel. Size of fftKernel must correspond
-	 * to the fft size of raiExtendedKernel
+	 * generates the out of bounds strategy for the extended area of the kernel
 	 */
 	@Parameter(required = false)
-	protected Img<C> fftKernel;
+	protected OutOfBoundsFactory<K, RandomAccessibleInterval<K>> obfKernel;
 
 	/**
-	 * RAI to store output
+	 * The output type. If null default output type will be used.
 	 */
 	@Parameter(required = false)
-	protected RandomAccessibleInterval<O> output;
+	protected Type<O> outType;
 
 	/**
-	 * Boolean indicating that the input FFT has allready been calculated (use
-	 * when re-using an input with the same kernel size)
+	 * Factory to create output Img
 	 */
 	@Parameter(required = false)
-	protected boolean performInputFFT = true;
+	protected ImgFactory<O> outFactory;
 
 	/**
-	 * Boolean indicating that the kernel FFT has allready been calculated (use
-	 * when re-using an input with the same kernel size)
+	 * Create the output using the outFactory and outType if they exist. If these
+	 * are null use a default factory and type
 	 */
-	@Parameter(required = false)
-	protected boolean performKernelFFT = true;
+	@Override
+	public Img<O> createOutput(Img<I> input) {
+
+		// if the outType is null
+		if (outType == null) {
+
+			// if the input type and kernel type are the same use this type
+			if (input.firstElement().getClass() == Util.getTypeFromInterval(kernel)
+				.getClass())
+			{
+				Object temp = input.firstElement().createVariable();
+				outType = (Type<O>) temp;
+
+			}
+			// otherwise default to float
+			else {
+				Object temp = new FloatType();
+				outType = (Type<O>) temp;
+			}
+		}
+
+		// if the outFactory is null use a PlanarImgFactory to create the output
+		if (outFactory == null) {
+			Object temp = new PlanarImgFactory();
+			outFactory = (ImgFactory<O>) temp;
+		}
+
+		return outFactory.create(input, outType.createVariable());
+	}
 
 }

@@ -33,37 +33,35 @@ package net.imagej.ops.fft.methods;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-
 import net.imagej.ops.AbstractStrictFunction;
 import net.imagej.ops.Ops.FFT;
-
 import net.imglib2.FinalDimensions;
 import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Util;
 import net.imglib2.view.Views;
-import net.imglib2.algorithm.fft2.FFTMethods;
+
+import org.scijava.Priority;
+import org.scijava.plugin.Parameter;
+import org.scijava.plugin.Plugin;
 
 /**
- * 
  * Forward FFT that operates on an RAI and wraps FFTMethods.
  * 
  * @author Brian Northan
- * 
  * @param <T>
  * @param <C>
  */
 @Plugin(type = FFT.class, name = FFT.NAME, priority = Priority.HIGH_PRIORITY)
 public class FFTRAI<T extends RealType<T>, C extends ComplexType<C>>
-		extends
-		AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<C>> {
+	extends
+	AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<C>>
+{
 
 	/**
 	 * generates the out of bounds strategy for the extended area
@@ -74,9 +72,10 @@ public class FFTRAI<T extends RealType<T>, C extends ComplexType<C>>
 	@Parameter(required = false)
 	protected long[] paddedSize;
 
-	public RandomAccessibleInterval<C> compute(
-			RandomAccessibleInterval<T> input,
-			RandomAccessibleInterval<C> output) {
+	@Override
+	public RandomAccessibleInterval<C> compute(RandomAccessibleInterval<T> input,
+		RandomAccessibleInterval<C> output)
+	{
 
 		RandomAccessibleInterval<T> inputRAI;
 
@@ -93,23 +92,25 @@ public class FFTRAI<T extends RealType<T>, C extends ComplexType<C>>
 		if (!FFTMethods.dimensionsEqual(input, paddedSize)) {
 
 			if (obf == null) {
-				obf = new OutOfBoundsConstantValueFactory<T, RandomAccessibleInterval<T>>(
+				obf =
+					new OutOfBoundsConstantValueFactory<T, RandomAccessibleInterval<T>>(
 						Util.getTypeFromInterval(input).createVariable());
 			}
 
-			Interval inputInterval = FFTMethods.paddingIntervalCentered(input,
-					FinalDimensions.wrap(paddedSize));
+			Interval inputInterval =
+				FFTMethods.paddingIntervalCentered(input, FinalDimensions
+					.wrap(paddedSize));
 
 			inputRAI = Views.interval(Views.extend(input, obf), inputInterval);
 
-		} else {
+		}
+		else {
 			inputRAI = input;
 		}
 
 		// TODO: proper use of Executor service
 		final int numThreads = Runtime.getRuntime().availableProcessors();
-		final ExecutorService service = Executors
-				.newFixedThreadPool(numThreads);
+		final ExecutorService service = Executors.newFixedThreadPool(numThreads);
 
 		FFTMethods.realToComplex(inputRAI, output, 0, false, service);
 

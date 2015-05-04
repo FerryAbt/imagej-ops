@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>net.imagej</groupId>
 		<artifactId>pom-imagej</artifactId>
-		<version>5.10.0</version>
+		<version>7.1.0</version>
 		<relativePath />
 	</parent>
 
 	<artifactId>imagej-ops</artifactId>
-	<version>0.9.1-SNAPSHOT</version>
+	<version>0.12.1-SNAPSHOT</version>
 
 	<name>ImageJ Operations</name>
 	<description>ImageJ OPS: a framework for reusable algorithms.</description>
@@ -210,8 +210,10 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<!-- NB: Make Eclipse generate code in a full build; see:
-					     http://wiki.eclipse.org/M2E_plugin_execution_not_covered -->
+					<!--
+					NB: Make Eclipse generate code in a full build; see:
+					http://wiki.eclipse.org/M2E_plugin_execution_not_covered
+					-->
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
 					<version>1.0.0</version>

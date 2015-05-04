@@ -28,34 +28,35 @@
  * #L%
  */
 
-package net.imagej.ops.create;
+package net.imagej.ops;
 
-import net.imagej.ops.Op;
-import net.imagej.ops.Ops;
-import net.imglib2.img.Img;
-import net.imglib2.type.NativeType;
-
-import org.scijava.ItemIO;
-import org.scijava.Priority;
+import org.scijava.AbstractContextual;
 import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
 
-@Plugin(type = Op.class, name = Ops.CreateImg.NAME,
-	priority = Priority.LOW_PRIORITY)
-
-public class CreateEmptyImgCopy<V extends NativeType<V>> implements
-	Ops.CreateImg
+/**
+ * Abstract base class for {@link Namespace} implementations.
+ * 
+ * @author Curtis Rueden
+ */
+public abstract class AbstractNamespace extends AbstractContextual implements
+	Namespace
 {
 
-	@Parameter(type = ItemIO.OUTPUT)
-	private Img<V> output;
-
 	@Parameter
-	private Img<V> input;
+	private OpService ops;
+
+	// -- Namespace methods --
 
 	@Override
-	public void run() {
-		output =
-			input.factory().create(input, input.firstElement().createVariable());
+	public OpService ops() {
+		return ops;
 	}
+
+	// -- Named methods --
+
+	@Override
+	public void setName(final String name) {
+		throw new UnsupportedOperationException();
+	}
+
 }

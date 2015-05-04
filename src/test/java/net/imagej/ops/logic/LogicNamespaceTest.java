@@ -28,34 +28,32 @@
  * #L%
  */
 
-package net.imagej.ops.create;
+package net.imagej.ops.logic;
 
-import net.imagej.ops.Op;
-import net.imagej.ops.Ops;
-import net.imglib2.img.Img;
-import net.imglib2.type.NativeType;
+import net.imagej.ops.AbstractNamespaceTest;
+import net.imagej.ops.LogicOps.And;
+import net.imagej.ops.LogicOps.Equal;
 
-import org.scijava.ItemIO;
-import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
+import org.junit.Test;
 
-@Plugin(type = Op.class, name = Ops.CreateImg.NAME,
-	priority = Priority.LOW_PRIORITY)
+/**
+ * Tests that the ops of the logic namespace have corresponding type-safe Java
+ * method signatures declared in the {@link LogicNamespace} class.
+ * 
+ * @author Curtis Rueden
+ */
+public class LogicNamespaceTest extends AbstractNamespaceTest {
 
-public class CreateEmptyImgCopy<V extends NativeType<V>> implements
-	Ops.CreateImg
-{
-
-	@Parameter(type = ItemIO.OUTPUT)
-	private Img<V> output;
-
-	@Parameter
-	private Img<V> input;
-
-	@Override
-	public void run() {
-		output =
-			input.factory().create(input, input.firstElement().createVariable());
+	/** Tests for {@link And} method convergence. */
+	@Test
+	public void testAnd() {
+		assertComplete("logic", LogicNamespace.class, And.NAME);
 	}
+
+	/** Tests for {@link Equal} method convergence. */
+	@Test
+	public void testEqual() {
+		assertComplete("logic", LogicNamespace.class, Equal.NAME);
+	}
+
 }

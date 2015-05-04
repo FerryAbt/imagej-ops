@@ -33,8 +33,6 @@ package net.imagej.ops.fft.methods;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.scijava.plugin.Plugin;
-
 import net.imagej.ops.AbstractStrictFunction;
 import net.imagej.ops.Ops.IFFT;
 import net.imglib2.RandomAccessibleInterval;
@@ -42,12 +40,12 @@ import net.imglib2.algorithm.fft2.FFTMethods;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 
+import org.scijava.plugin.Plugin;
+
 /**
- * 
  * Inverse fft that operates on an RAI and wraps FFTMethods.
  * 
  * @author Brian Northan
- *
  * @param <C>
  * @param <T>
  */
@@ -56,22 +54,21 @@ public class IFFTRAI<C extends ComplexType<C>, T extends RealType<T>>
 	extends
 	AbstractStrictFunction<RandomAccessibleInterval<C>, RandomAccessibleInterval<T>>
 {
-	
+
+	@Override
 	public RandomAccessibleInterval<T> compute(RandomAccessibleInterval<C> input,
 		RandomAccessibleInterval<T> output)
 	{
 		// TODO: proper use of Executor service
 		final int numThreads = Runtime.getRuntime().availableProcessors();
-		final ExecutorService service =
-			Executors.newFixedThreadPool(numThreads);
-		
+		final ExecutorService service = Executors.newFixedThreadPool(numThreads);
+
 		for (int d = input.numDimensions() - 1; d > 0; d--)
 			FFTMethods.complexToComplex(input, d, false, true, service);
-	
+
 		FFTMethods.complexToReal(input, output, FFTMethods
-					.unpaddingIntervalCentered(input, output), 0, true,
-					service);
-		
+			.unpaddingIntervalCentered(input, output), 0, true, service);
+
 		return output;
 	}
 }

@@ -30,12 +30,11 @@
 
 package net.imagej.ops.fft.size;
 
-import org.scijava.plugin.Plugin;
-
 import net.imagej.ops.Ops.FFTSize;
 import net.imglib2.FinalDimensions;
-
 import net.imglib2.algorithm.fft2.FFTMethods;
+
+import org.scijava.plugin.Plugin;
 
 /**
  * Op to calculate JTransform FFT sizes.
@@ -45,30 +44,27 @@ import net.imglib2.algorithm.fft2.FFTMethods;
 @Plugin(type = FFTSize.class, name = FFTSize.NAME)
 public class ComputeFFTSize extends AbstractFFTSize {
 
+	@Override
 	public void run() {
 		FinalDimensions dim = new FinalDimensions(inputSize);
 
 		if (fast && forward) {
 
-			FFTMethods
-				.dimensionsRealToComplexFast(dim, paddedSize, fftSize);
+			FFTMethods.dimensionsRealToComplexFast(dim, paddedSize, fftSize);
 
 		}
 		else if (!fast && forward) {
-			FFTMethods.dimensionsRealToComplexSmall(dim, paddedSize,
-				fftSize);
+			FFTMethods.dimensionsRealToComplexSmall(dim, paddedSize, fftSize);
 
 		}
 		if (fast && !forward) {
 
-			FFTMethods
-				.dimensionsComplexToRealFast(dim, paddedSize, fftSize);
+			FFTMethods.dimensionsComplexToRealFast(dim, paddedSize, fftSize);
 
 		}
 		else if (!fast && !forward) {
 
-			FFTMethods.dimensionsComplexToRealSmall(dim, paddedSize,
-				fftSize);
+			FFTMethods.dimensionsComplexToRealSmall(dim, paddedSize, fftSize);
 
 		}
 	}

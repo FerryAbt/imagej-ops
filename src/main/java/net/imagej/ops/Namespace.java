@@ -28,34 +28,20 @@
  * #L%
  */
 
-package net.imagej.ops.create;
+package net.imagej.ops;
 
-import net.imagej.ops.Op;
-import net.imagej.ops.Ops;
-import net.imglib2.img.Img;
-import net.imglib2.type.NativeType;
+import org.scijava.Contextual;
+import org.scijava.Named;
 
-import org.scijava.ItemIO;
-import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
+/**
+ * A namespace is a collection of ops with related functions.
+ * 
+ * @author Curtis Rueden
+ */
+public interface Namespace extends Contextual, Named {
 
-@Plugin(type = Op.class, name = Ops.CreateImg.NAME,
-	priority = Priority.LOW_PRIORITY)
+	// -- Namespace methods --
 
-public class CreateEmptyImgCopy<V extends NativeType<V>> implements
-	Ops.CreateImg
-{
+	public OpService ops();
 
-	@Parameter(type = ItemIO.OUTPUT)
-	private Img<V> output;
-
-	@Parameter
-	private Img<V> input;
-
-	@Override
-	public void run() {
-		output =
-			input.factory().create(input, input.firstElement().createVariable());
-	}
 }

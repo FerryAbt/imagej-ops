@@ -30,21 +30,19 @@
 
 package net.imagej.ops.convolve;
 
-import org.scijava.plugin.Plugin;
-
+import net.imagej.ops.Op;
+import net.imagej.ops.fft.filter.LinearFFTFilterRAI;
 import net.imglib2.Cursor;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.RealType;
 
-import net.imagej.ops.Op;
-import net.imagej.ops.fft.filter.LinearFFTFilterRAI;
+import org.scijava.plugin.Plugin;
 
 /**
  * Correlate op for (@link RandomAccessibleInterval)
  * 
  * @author bnorthan
- * 
  * @param <I>
  * @param <O>
  * @param <K>
@@ -52,14 +50,14 @@ import net.imagej.ops.fft.filter.LinearFFTFilterRAI;
  */
 @Plugin(type = Op.class)
 public class CorrelateFFTRAI<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>, C extends ComplexType<C>>
-		extends LinearFFTFilterRAI<I, O, K, C> {
+	extends LinearFFTFilterRAI<I, O, K, C>
+{
 
 	/**
 	 * Perform correlation by conjugate multiplying the FFTs in the frequency
-	 * domain
-	 * 
-	 * TODO use an op here??
+	 * domain TODO use an op here??
 	 */
+	@Override
 	protected void frequencyOperation(Img<C> a, Img<C> b) {
 		final Cursor<C> cursorA = a.cursor();
 		final Cursor<C> cursorB = b.cursor();
@@ -72,7 +70,7 @@ public class CorrelateFFTRAI<I extends RealType<I>, O extends RealType<O>, K ext
 			temp.set(cursorB.get());
 			temp.complexConjugate();
 
-			cursorA.get().mul(cursorB.get());
+			cursorA.get().mul(temp);
 		}
 	}
 }

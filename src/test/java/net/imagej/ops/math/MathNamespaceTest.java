@@ -28,34 +28,25 @@
  * #L%
  */
 
-package net.imagej.ops.create;
+package net.imagej.ops.math;
 
-import net.imagej.ops.Op;
-import net.imagej.ops.Ops;
-import net.imglib2.img.Img;
-import net.imglib2.type.NativeType;
+import net.imagej.ops.AbstractNamespaceTest;
+import net.imagej.ops.MathOps.Abs;
 
-import org.scijava.ItemIO;
-import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
+import org.junit.Test;
 
-@Plugin(type = Op.class, name = Ops.CreateImg.NAME,
-	priority = Priority.LOW_PRIORITY)
+/**
+ * Tests that the ops of the math namespace have corresponding type-safe Java
+ * method signatures declared in the {@link MathNamespace} class.
+ * 
+ * @author Curtis Rueden
+ */
+public class MathNamespaceTest extends AbstractNamespaceTest {
 
-public class CreateEmptyImgCopy<V extends NativeType<V>> implements
-	Ops.CreateImg
-{
-
-	@Parameter(type = ItemIO.OUTPUT)
-	private Img<V> output;
-
-	@Parameter
-	private Img<V> input;
-
-	@Override
-	public void run() {
-		output =
-			input.factory().create(input, input.firstElement().createVariable());
+	/** Tests for {@link Abs} method convergence. */
+	@Test
+	public void testAbs() {
+		assertComplete("math", MathNamespace.class, Abs.NAME);
 	}
+
 }

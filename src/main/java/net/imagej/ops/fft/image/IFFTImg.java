@@ -33,28 +33,26 @@ package net.imagej.ops.fft.image;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
-
 import net.imagej.ops.Ops.IFFT;
 import net.imagej.ops.fft.methods.IFFTRAI;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
 
+import org.scijava.Priority;
+import org.scijava.plugin.Plugin;
+
 /**
  * Inverse FFT op implemented by wrapping FFTMethods.
  * 
  * @author Brian Northan
- * 
  * @param <T>
  * @param <I>
  */
 @Plugin(type = IFFT.class, name = IFFT.NAME, priority = Priority.HIGH_PRIORITY)
-public class IFFTImg<T extends RealType<T>, O extends Img<T>>
-		extends
-		AbstractIFFTImg<ComplexFloatType, Img<ComplexFloatType>, T, O> {
+public class IFFTImg<T extends RealType<T>, O extends Img<T>> extends
+	AbstractIFFTImg<ComplexFloatType, Img<ComplexFloatType>, T, O>
+{
 
 	@Override
 	public O compute(Img<ComplexFloatType> input, O output) {

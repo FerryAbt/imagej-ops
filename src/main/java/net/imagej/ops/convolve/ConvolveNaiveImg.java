@@ -28,61 +28,68 @@
  * #L%
  */
 
-package net.imagej.ops.threshold.local;
+package net.imagej.ops.convolve;
 
-import net.imagej.ops.AbstractStrictFunction;
+import net.imagej.ops.Contingent;
 import net.imagej.ops.Op;
 import net.imagej.ops.Ops;
-import net.imagej.ops.threshold.local.LocalThresholdMethod.Pair;
-import net.imglib2.Cursor;
+import net.imagej.ops.fft.filter.AbstractFilterImg;
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.algorithm.neighborhood.Neighborhood;
-import net.imglib2.algorithm.neighborhood.Shape;
+import net.imglib2.img.Img;
+import net.imglib2.outofbounds.OutOfBoundsConstantValueFactory;
 import net.imglib2.outofbounds.OutOfBoundsFactory;
-import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.util.Intervals;
+import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
-import org.scijava.plugin.Parameter;
+import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 
 /**
- * @author Martin Horn
+ * Convolves an image naively (no FFTs).
  */
-@Plugin(type = Op.class, name = Ops.Threshold.NAME)
-public class LocalThreshold<T extends RealType<T>>
-	extends
-	AbstractStrictFunction<RandomAccessibleInterval<T>, RandomAccessibleInterval<BitType>>
-	implements Ops.Threshold
+@Plugin(type = Op.class, name = Ops.Convolve.NAME,
+	priority = Priority.HIGH_PRIORITY)
+public class ConvolveNaiveImg<I extends RealType<I>, O extends RealType<O>, K extends RealType<K>>
+	extends AbstractFilterImg<I, O, K> implements Contingent, Ops.Convolve
 {
 
-	@Parameter
-	private LocalThresholdMethod<T> method;
+	protected Img<O> safeCompute(Img<I> img, Img<O> out) {
 
-	@Parameter
-	private Shape shape;
+		if (obfInput == null) {
+			obfInput =
+				new OutOfBoundsConstantValueFactory<I, RandomAccessibleInterval<I>>(
+					Util.getTypeFromInterval(img).createVariable());
+		}
 
-	@Parameter(required = false)
-	private OutOfBoundsFactory<T, RandomAccessibleInterval<T>> outOfBounds;
+		if ((obfKernel == null) && (kernel != null)) {
+			obfKernel =
+				new OutOfBoundsConstantValueFactory<K, RandomAccessibleInterval<K>>(
+					Util.getTypeFromInterval(kernel).createVariable());
+		}
+
+		// extend the input
+		RandomAccessibleInterval<I> extendedIn =
+			Views.interval(Views.extend(img, obfInput), img);
+
+		OutOfBoundsFactory<O, RandomAccessibleInterval<O>> obfOutput =
+			new OutOfBoundsConstantValueFactory<O, RandomAccessibleInterval<O>>(Util
+				.getTypeFromInterval(out).createVariable());
+
+		// extend the output
+		RandomAccessibleInterval<O> extendedOut =
+			Views.interval(Views.extend(out, obfOutput), out);
+
+		ops.run(ConvolveNaive.class, extendedOut, extendedIn, kernel);
+
+		return out;
+	}
 
 	@Override
-	public RandomAccessibleInterval<BitType>
-		compute(RandomAccessibleInterval<T> input,
-			RandomAccessibleInterval<BitType> output)
-	{
-		// TODO: provide threaded implementation and specialized ones for
-		// rectangular neighborhoods (using integral images)
-		RandomAccessibleInterval<T> extInput =
-			Views.interval(Views.extend(input, outOfBounds), input);
-		Iterable<Neighborhood<T>> neighborhoods = shape.neighborhoodsSafe(extInput);
-		final Cursor<T> inCursor = Views.flatIterable(input).cursor();
-		final Cursor<BitType> outCursor = Views.flatIterable(output).cursor();
-		Pair<T> pair = new Pair<T>();
-		for (final Neighborhood<T> neighborhood : neighborhoods) {
-			pair.neighborhood = neighborhood;
-			pair.pixel = inCursor.next();
-			method.compute(pair, outCursor.next());
-		}
-		return output;
+	public boolean conforms() {
+		// conforms only if the kernel is sufficiently small
+		return Intervals.numElements(kernel) <= 9;
 	}
+
 }

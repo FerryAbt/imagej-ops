@@ -28,34 +28,26 @@
  * #L%
  */
 
-package net.imagej.ops.create;
+package net.imagej.ops.threshold;
 
-import net.imagej.ops.Op;
-import net.imagej.ops.Ops;
-import net.imglib2.img.Img;
-import net.imglib2.type.NativeType;
+import net.imagej.ops.AbstractNamespace;
 
-import org.scijava.ItemIO;
-import org.scijava.Priority;
-import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
+/**
+ * The threshold namespace contains operations related to binary thresholding.
+ * 
+ * @author Curtis Rueden
+ */
+public class ThresholdNamespace extends AbstractNamespace {
 
-@Plugin(type = Op.class, name = Ops.CreateImg.NAME,
-	priority = Priority.LOW_PRIORITY)
+	// -- Threshold namespace ops --
 
-public class CreateEmptyImgCopy<V extends NativeType<V>> implements
-	Ops.CreateImg
-{
+	// TODO
 
-	@Parameter(type = ItemIO.OUTPUT)
-	private Img<V> output;
-
-	@Parameter
-	private Img<V> input;
+	// -- Named methods --
 
 	@Override
-	public void run() {
-		output =
-			input.factory().create(input, input.firstElement().createVariable());
+	public String getName() {
+		return "threshold";
 	}
+
 }
