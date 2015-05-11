@@ -41,6 +41,8 @@ import org.junit.Test;
 import net.imglib2.type.numeric.real.*;
 import net.imglib2.type.volatiles.VolatileRealType;
 import net.imagej.types.UnboundedIntegerType;
+import net.imglib2.type.volatiles.VolatileRealType;
+import net.imagej.types.UnboundedIntegerType;
 
 /**
  * Tests the {@link RealBinaryMath} ops.
@@ -76,5 +78,56 @@ public class TestRealBinaryMath extends AbstractOpTest {
 
 	}
 #end
+
+	public void testBitType()
+	{
+		RealType two;
+		RealType mid;
+		Object result;
+		ArrayList list;
+		double test;
+		
+		two = new BitType();
+	two.setOne();
+	result = ops.run(RealBinaryMath.RealTypeAdd.class, two, two, two);
+	mid = (DoubleType) result;
+	test = mid.getRealDouble();
+	assertEquals(test,1.0, 0.0);
+		
+		
+	}
+	
+	public void testLongType()
+	{
+		RealType two;
+		RealType mid;
+		Object result;
+		ArrayList list;
+		double test;
+		
+		two = new LongType();
+	two.setOne();
+	result = ops.run(RealBinaryMath.RealTypeAdd.class, two, two, two);
+	mid = (DoubleType) result;
+	test = mid.getRealDouble();
+	assertEquals(test,1.0, 0.0);
+	}
+	
+	public void testVolatileRealType()
+	{
+		RealType two;
+		RealType mid = null;
+		Object result;
+		ArrayList list;
+		double test;
+		
+		two = new VolatileRealType(mid);
+	two.setOne();
+	result = ops.run(RealBinaryMath.RealTypeAdd.class, two, two, two);
+	mid = (DoubleType) result;
+	test = mid.getRealDouble();
+	assertEquals(test,1.0, 0.0);
+		
+	}
 
 }

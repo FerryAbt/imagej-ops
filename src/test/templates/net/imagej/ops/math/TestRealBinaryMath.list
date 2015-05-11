@@ -3,17 +3,7 @@
 [TestRealBinaryMath.java]
 types = ```
 [
-	"DoubleType",
-	"FloatType",
-	"UnsignedByteType",
-	"UnsignedIntType",
-	"IntType",
-	"ShortType",
-	"UnsignedShortType",
-	"Unsigned12BitType",
-	"Unsigned2BitType",
-	"Unsigned4BitType",
-	"UnboundedIntType",
+	
 	
 ]
 ```
