@@ -9,6 +9,7 @@ ops = ```
 	[name: "convolve",    iface: "Convolve"],
 	[name: "correlate",   iface: "Correlate"],
 	[name: "createimg",   iface: "CreateImg"],
+	[name: "createlabeling",   iface: "CreateLabeling"],
 	[name: "crop",        iface: "Crop",           aliases: ["slice"]],
 	[name: "deconvolve",  iface: "Deconvolve"],
 	[name: "equation",    iface: "Equation"],
