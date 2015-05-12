@@ -219,7 +219,7 @@ public interface OpService extends PTService<Op>, ImageJService {
 		long... dims);
 
 	/** Executes the "createimg" operation on the given arguments. */
-	@OpMethod(op = net.imagej.ops.create.CreateEmptyImgCopy.class)
+	@OpMethod(op = net.imagej.ops.create.CreateImgFromImg.class)
 	<V extends NativeType<V>> Img<V> createimg(Img<V> input);
 
 	/** Executes the "crop" operation on the given arguments. */

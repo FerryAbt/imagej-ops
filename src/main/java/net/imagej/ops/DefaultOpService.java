@@ -37,7 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.imagej.ImgPlus;
-import net.imagej.ops.create.CreateEmptyImgCopy;
+import net.imagej.ops.create.CreateImgFromImg;
 import net.imagej.ops.create.CreateEmptyImgPlusCopy;
 import net.imagej.ops.create.CreateImgDifferentNativeType;
 import net.imagej.ops.create.CreateImgNativeType;
@@ -254,7 +254,7 @@ public class DefaultOpService extends AbstractPTService<Op> implements
 	@Override
 	public <V extends NativeType<V>> Img<V> createimg(final Img<V> input) {
 		@SuppressWarnings("unchecked")
-		final Img<V> result = (Img<V>) run(CreateEmptyImgCopy.class, input);
+		final Img<V> result = (Img<V>) run(CreateImgFromImg.class, input);
 		return result;
 	}
 

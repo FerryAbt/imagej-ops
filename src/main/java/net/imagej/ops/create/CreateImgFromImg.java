@@ -43,7 +43,7 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = Op.class, name = Ops.CreateImg.NAME,
 	priority = Priority.LOW_PRIORITY)
 
-public class CreateEmptyImgCopy<V extends NativeType<V>> implements
+public class CreateImgFromImg<V extends NativeType<V>> implements
 	Ops.CreateImg
 {
 
