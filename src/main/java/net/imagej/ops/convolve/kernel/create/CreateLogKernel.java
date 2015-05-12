@@ -33,6 +33,7 @@ package net.imagej.ops.convolve.kernel.create;
 import net.imagej.ops.Op;
 import net.imagej.ops.Ops;
 import net.imglib2.Cursor;
+import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
@@ -66,19 +67,18 @@ public class CreateLogKernel<T extends ComplexType<T> & NativeType<T>> extends
 			sigmaPixels[i] = sigma_optimal / calibration[i];
 		}
 		final int n = sigmaPixels.length;
-		final long[] sizes = new long[n];
+		final long[] dims = new long[n];
 		final long[] middle = new long[n];
 		for (int d = 0; d < n; ++d) {
 			// The half size of the kernel is 3 standard deviations (or a
 			// minimum half size of 2)
 			final int hksizes = Math.max(2, (int) (3 * sigmaPixels[d] + 0.5) + 1);
 			// add 3 border pixels to achieve smoother derivatives at the border
-			sizes[d] = 3 + 2 * hksizes;
+			dims[d] = 3 + 2 * hksizes;
 			middle[d] = 1 + hksizes;
 		}
 
-		createOutputImg(sizes, fac, outType, new ArrayImgFactory<DoubleType>(),
-			new DoubleType());
+		final Img<T> output = createEmptyKernel(dims);
 
 		final Cursor<T> c = output.cursor();
 		final long[] coords = new long[numDimensions];

@@ -31,8 +31,9 @@
 package net.imagej.ops.convolve.kernel.create;
 
 import net.imagej.ops.Contingent;
-import net.imagej.ops.create.AbstractCreateImg;
-import net.imglib2.img.array.ArrayImgFactory;
+import net.imagej.ops.OpService;
+import net.imagej.ops.Ops.CreateImg;
+import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.complex.ComplexDoubleType;
@@ -51,12 +52,17 @@ import org.scijava.plugin.Parameter;
  * @param <T>
  */
 public abstract class AbstractCreateKernel<T extends ComplexType<T> & NativeType<T>>
-	extends AbstractCreateImg<T, DoubleType, ArrayImgFactory<DoubleType>>
-	implements Contingent
+	implements CreateImg, Contingent
 {
 
 	@Parameter
+	protected OpService ops;
+	
+	@Parameter
 	double[] sigma;
+
+	@Parameter(required = false)
+	protected T outType;
 
 	@Parameter(required = false)
 	double[] calibration;
@@ -99,5 +105,10 @@ public abstract class AbstractCreateKernel<T extends ComplexType<T> & NativeType
 	}
 
 	abstract void createKernel();
+	
+	@SuppressWarnings("unchecked")
+	protected Img<T> createEmptyKernel(long[] dims){
+		return (Img<T>) ops.createimg(dims, outType == null ? new DoubleType() : outType);
+	}
 
 }

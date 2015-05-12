@@ -30,36 +30,39 @@
 
 package net.imagej.ops.create;
 
-import net.imagej.ops.Op;
-import net.imagej.ops.Ops;
-import net.imglib2.img.planar.PlanarImgFactory;
+import net.imglib2.Dimensions;
+import net.imglib2.img.Img;
+import net.imglib2.img.ImgFactory;
 import net.imglib2.type.Type;
-import net.imglib2.type.numeric.real.DoubleType;
 
+import org.scijava.ItemIO;
 import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
 
 /**
- * Creates a default image. If outType is not passed it is set to a default of
- * DoubleType. If fac is not passed in it is set to a default of
- * PlanarImgFactory.
+ * Abstract class for creating an image from a factory and a type. Derived
+ * classes will contain logic to determine size and values of the image.
  * 
  * @author bnorthan
- * @param <V>
+ * @author Tim-Oliver Buchholz
+ * @param <T>
  */
-@Plugin(type = Op.class, name = Ops.CreateImg.NAME)
-public class DefaultCreateImg<V extends Type<V>> extends
-	AbstractCreateImg<V, DoubleType, PlanarImgFactory<DoubleType>> implements
-	Ops.CreateImg
-{
+public class DefaultCreateImg<T extends Type<T>> extends AbstractCreateImg<T> {
+
+	@Parameter(type = ItemIO.OUTPUT)
+	private Img<T> output;
 
 	@Parameter
-	private long[] dims;
+	private Dimensions dims;
+
+	@Parameter
+	private Type<T> outType;
+
+	@Parameter
+	private ImgFactory<T> fac;
 
 	@Override
 	public void run() {
-		createOutputImg(dims, fac, outType, new PlanarImgFactory<DoubleType>(),
-			new DoubleType());
+		output = fac.create(dims, outType.createVariable());
 	}
 
 }

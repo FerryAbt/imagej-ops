@@ -33,10 +33,9 @@ package net.imagej.ops.convolve.kernel.create;
 import net.imagej.ops.Op;
 import net.imagej.ops.Ops;
 import net.imglib2.Cursor;
-import net.imglib2.img.array.ArrayImgFactory;
+import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
-import net.imglib2.type.numeric.real.DoubleType;
 import net.imglib2.util.Util;
 
 import org.scijava.plugin.Plugin;
@@ -71,8 +70,8 @@ public class CreateGaussianKernel<T extends ComplexType<T> & NativeType<T>>
 			kernelArrays[d] = Util.createGaussianKernel1DDouble(sigmaPixels[d], true);
 		}
 
-		createOutputImg(dims, fac, outType, new ArrayImgFactory<DoubleType>(),
-			new DoubleType());
+		
+		final Img<T> output = createEmptyKernel(dims);
 
 		Cursor<T> cursor = output.cursor();
 		while (cursor.hasNext()) {
